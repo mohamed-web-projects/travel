@@ -1,0 +1,226 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ========================================================================
+   Theme tokens — dark default, light toggled via .dark class on <html>
+   ======================================================================== */
+
+@theme inline {
+  --font-sans: var(--font-alkatra), ui-sans-serif, system-ui, sans-serif;
+
+  --color-background: var(--re-background);
+  --color-card: var(--re-card);
+  --color-card-foreground: var(--re-card-foreground);
+  --color-foreground: var(--re-foreground);
+  --color-muted: var(--re-muted);
+  --color-muted-foreground: var(--re-muted-foreground);
+  --color-primary: var(--re-primary);
+  --color-primary-foreground: var(--re-primary-foreground);
+  --color-accent: var(--re-accent);
+  --color-accent-foreground: var(--re-accent-foreground);
+  --color-gold: #f7c948;
+  --color-destructive: #fb7185;
+  --color-success: #34d399;
+  --color-hairline: var(--re-hairline);
+  --color-surface: var(--re-surface);
+  --color-surface-strong: var(--re-surface-strong);
+
+  --shadow-glow: var(--re-glow);
+  --shadow-card: var(--re-card-shadow);
+
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-pulse-slow: pulse 4s ease-in-out infinite;
+  --animate-spin-slow: spin 14s linear infinite;
+}
+
+/* ---------- light theme ---------- */
+:root {
+  color-scheme: light;
+
+  --re-background: #f5f5fa;
+  --re-card: #ffffff;
+  --re-card-foreground: #191c31;
+  --re-foreground: #181b2e;
+  --re-muted: #eceaf8;
+  --re-muted-foreground: #5c5f7c;
+  --re-primary: #6d68ff;
+  --re-primary-foreground: #ffffff;
+  --re-accent: #5c6cff;
+  --re-accent-foreground: #ffffff;
+  --re-hairline: rgba(24, 27, 54, 0.14);
+  --re-surface: rgba(24, 27, 54, 0.045);
+  --re-surface-strong: rgba(24, 27, 54, 0.08);
+  --re-glow: 0 0 24px 0 rgba(109, 104, 255, 0.3);
+  --re-card-shadow: 0 18px 40px -18px rgba(28, 32, 70, 0.22);
+}
+
+/* ---------- dark theme ---------- */
+.dark {
+  color-scheme: dark;
+
+  --re-background: #05060a;
+  --re-card: #0b0d14;
+  --re-card-foreground: #f4f4fa;
+  --re-foreground: #e9e9f2;
+  --re-muted: #161a26;
+  --re-muted-foreground: #9ba1b2;
+  --re-primary: #7d7dfe;
+  --re-primary-foreground: #ffffff;
+  --re-accent: #a8befc;
+  --re-accent-foreground: #101322;
+  --re-hairline: rgba(255, 255, 255, 0.1);
+  --re-surface: rgba(255, 255, 255, 0.04);
+  --re-surface-strong: rgba(255, 255, 255, 0.08);
+  --re-glow: 0 0 24px 0 rgb(125 125 254 / 0.35);
+  --re-card-shadow: 0 18px 40px -18px rgb(0 0 0 / 0.65);
+}
+
+/* ---------- keyframes ---------- */
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-14px);
+  }
+}
+
+@keyframes panel-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ---------- base layer ---------- */
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    @apply bg-background text-foreground overflow-x-hidden;
+  }
+
+  ::selection {
+    @apply bg-primary text-primary-foreground;
+  }
+
+  img {
+    @apply select-none;
+  }
+
+  /* Fix native dropdown contrast in both themes */
+  select option {
+    background-color: var(--re-muted);
+    color: var(--re-foreground);
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    @apply appearance-none;
+  }
+
+  /* Focus ring defaults using theme tokens */
+  :focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--re-primary) 60%, transparent);
+    outline-offset: 2px;
+  }
+
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--re-primary) 50%, transparent);
+  }
+}
+
+/* ---------- utility layer ---------- */
+
+@layer utilities {
+  .glass {
+    @apply border border-hairline bg-white/50 backdrop-blur-xl dark:bg-surface;
+  }
+
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary via-accent to-gold bg-clip-text text-transparent;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .animate-panel-in {
+    animation: panel-in 0.18s ease-out;
+  }
+}
+
+/* ---------- reduced motion ---------- */
+
+/* ---------- print helpers ---------- */
+
+.page-break-inside-avoid {
+  page-break-inside: avoid;
+}
+
+.break-inside-avoid {
+  break-inside: avoid;
+}
+
+@media print {
+  html,
+  body {
+    height: auto !important;
+    max-height: none !important;
+    min-height: auto !important;
+    overflow: visible !important;
+  }
+
+  body * {
+    visibility: hidden;
+  }
+
+  body > * {
+    overflow: visible !important;
+  }
+
+  #itinerary-print,
+  #itinerary-print * {
+    visibility: visible;
+  }
+
+  #itinerary-print {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    box-shadow: none;
+    border-radius: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
