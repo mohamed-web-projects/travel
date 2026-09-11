@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "description": "REAORI Travel & Tourism — modern Next.js App Router build",
+  "engines": {
+    "node": ">=20.9.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",

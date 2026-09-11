@@ -186,7 +186,7 @@ export function Navbar() {
           </Link>
 
           <Link
-            href="/dashboard"
+            href="/dashboard?tab=wishlist"
             aria-label={t("wishlist")}
             className="relative grid h-10 w-10 place-items-center rounded-xl border border-hairline text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground"
           >

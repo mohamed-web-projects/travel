@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -65,9 +64,7 @@ function BookingStatus({ status }: { status: BookingEntry["status"] }) {
 const VALID_TABS: Tab[] = ["overview", "profile", "wishlist", "bookings", "itinerary"];
 
 export function Dashboard({ initialTab }: { initialTab?: string }) {
-  const [tab, setTab] = useState<Tab>(() =>
-    VALID_TABS.includes(initialTab as Tab) ? (initialTab as Tab) : "overview"
-  );
+  const tab: Tab = VALID_TABS.includes(initialTab as Tab) ? (initialTab as Tab) : "overview";
   const { ids: items } = useWishlist();
   const { format } = useSettings();
   const { user, signOut } = useAuth();
@@ -108,7 +105,7 @@ export function Dashboard({ initialTab }: { initialTab?: string }) {
             {TABS.map(({ id, label, icon: Icon }) => (
               <button
                 key={id}
-                onClick={() => setTab(id)}
+                onClick={() => router.replace(`/dashboard?tab=${id}`)}
                 aria-pressed={tab === id}
                 className={cn(
                   "flex w-full items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-semibold transition-colors",
@@ -203,7 +200,7 @@ export function Dashboard({ initialTab }: { initialTab?: string }) {
                     </p>
                   </div>
                   <button
-                    onClick={() => setTab("itinerary")}
+                    onClick={() => router.replace("/dashboard?tab=itinerary")}
                     className="inline-flex h-11 shrink-0 items-center gap-2 rounded-xl bg-primary px-5 text-sm font-semibold text-primary-foreground shadow-glow transition-colors hover:bg-primary/90"
                   >
                     <FileText className="h-4 w-4" />
@@ -294,7 +291,7 @@ export function Dashboard({ initialTab }: { initialTab?: string }) {
             <motion.div key="bookings" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="space-y-6">
               <h2 className="text-xl font-bold text-foreground">My bookings</h2>
               {[...upcoming, ...past].map((b) => (
-                <BookingRow key={b.id} booking={b} onItinerary={() => setTab("itinerary")} />
+                <BookingRow key={b.id} booking={b} onItinerary={() => router.replace("/dashboard?tab=itinerary")} />
               ))}
             </motion.div>
           )}

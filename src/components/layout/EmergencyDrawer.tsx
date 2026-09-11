@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   LifeBuoy,
   X,
@@ -38,24 +38,21 @@ export function EmergencyDrawer() {
         <LifeBuoy className="h-5 w-5" />
       </motion.button>
 
-      <AnimatePresence>
-        {open && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setOpen(false)}
-              className="fixed inset-0 z-[70] bg-black/60 backdrop-blur-sm"
-            />
-            <motion.aside
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "spring", stiffness: 340, damping: 32 }}
-              className="fixed inset-y-0 right-0 z-[80] flex w-full max-w-sm flex-col border-l border-hairline bg-background/95 backdrop-blur-2xl"
-              aria-label="Emergency & local information"
-            >
+      {open && (
+        <>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            onClick={() => setOpen(false)}
+            className="fixed inset-0 z-[70] bg-black/60 backdrop-blur-sm"
+          />
+          <motion.aside
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            transition={{ type: "spring", stiffness: 340, damping: 32 }}
+            className="fixed inset-y-0 right-0 z-[80] flex w-full max-w-sm flex-col border-l border-hairline bg-background/95 backdrop-blur-2xl"
+            aria-label="Emergency & local information"
+          >
               <div className="flex items-center justify-between border-b border-hairline p-5">
                 <div className="flex items-center gap-3">
                   <span className="grid h-10 w-10 place-items-center rounded-xl bg-primary/15 text-primary">
@@ -95,15 +92,13 @@ export function EmergencyDrawer() {
               </div>
 
               <div className="flex-1 overflow-y-auto px-4 pb-6">
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={tab}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.25 }}
-                    className="space-y-3"
-                  >
+                <motion.div
+                  key={tab}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.25 }}
+                  className="space-y-3"
+                >
                     {tab === "contacts" && (
                       <>
                         <InfoRow icon={Ambulance} label="Universal emergency" value={EMERGENCY.international} highlight />
@@ -139,12 +134,10 @@ export function EmergencyDrawer() {
                       </>
                     )}
                   </motion.div>
-                </AnimatePresence>
               </div>
             </motion.aside>
           </>
         )}
-      </AnimatePresence>
     </>
   );
 }

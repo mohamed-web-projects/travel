@@ -73,10 +73,39 @@ function save(pos: Pos) {
   listeners.forEach((l) => l());
 }
 
+/* Hydration-safe "isMounted" flag: false on server and during the first client
+   render, flips to true one tick after mount so browser-only `window` reads in
+   render never run before hydration completes. */
+let isMountedCache = false;
+const mountedListeners = new Set<() => void>();
+
+function subscribeMounted(cb: () => void) {
+  mountedListeners.add(cb);
+  if (!isMountedCache) {
+    setTimeout(() => {
+      isMountedCache = true;
+      mountedListeners.forEach((l) => l());
+    }, 0);
+  }
+  return () => {
+    mountedListeners.delete(cb);
+  };
+}
+
+function getMounted(): boolean {
+  return isMountedCache;
+}
+
+function getServerMounted(): boolean {
+  return false;
+}
+
 export function CurrencyLanguageBar() {
   const { currency, setCurrency, language, setLanguage } = useSettings();
   const persisted = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const isMounted = useSyncExternalStore(subscribeMounted, getMounted, getServerMounted);
   const [open, setOpen] = useState(false);
+  const [metrics, setMetrics] = useState<{ w: number; h: number } | null>(null);
   const [dragPos, setDragPos] = useState<Pos | null>(null);
   const barRef = useRef<HTMLDivElement>(null);
   const drag = useRef<{
@@ -98,9 +127,12 @@ export function CurrencyLanguageBar() {
       y: Math.min(Math.max(MARGIN, p.y), Math.max(MARGIN, window.innerHeight - height - MARGIN)),
     };
   };
-
-  const alignRight = pos !== null && pos.x + PANEL_W > window.innerWidth;
-  const flipUp = pos !== null && pos.y + 60 + PANEL_EST_H > window.innerHeight;
+  const barW = metrics?.w ?? 96;
+  const barH = metrics?.h ?? 44;
+  const barRight = pos ? pos.x + barW : isMounted ? window.innerWidth - MARGIN : barW;
+  const barTop = pos ? pos.y : isMounted ? DEFAULT_Y : 0;
+  const alignRight = isMounted ? barRight > window.innerWidth - (PANEL_W - barW) : false;
+  const flipUp = isMounted ? barTop + barH + 8 + PANEL_EST_H > window.innerHeight : false;
 
   useEffect(() => {
     if (!open) return;
@@ -118,7 +150,11 @@ export function CurrencyLanguageBar() {
       suppressClick.current = false;
       return;
     }
-    setOpen((v) => !v);
+    const next = !open;
+    setOpen(next);
+    if (next && barRef.current) {
+      setMetrics({ w: barRef.current.offsetWidth, h: barRef.current.offsetHeight });
+    }
     const p = dragPos ?? persisted;
     if (p) setDragPos(clamp(p));
   };

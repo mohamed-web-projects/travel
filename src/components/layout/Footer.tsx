@@ -34,7 +34,7 @@ const footerLinks = [
     title: "Account",
     links: [
       { label: "Dashboard", href: "/dashboard" },
-      { label: "Wishlist", href: "/dashboard" },
+      { label: "Wishlist", href: "/dashboard?tab=wishlist" },
       { label: "Sign in", href: "/auth/signin" },
       { label: "Register", href: "/auth/signup" },
       { label: "Contact us", href: "/#contact" },
