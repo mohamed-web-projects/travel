@@ -4,7 +4,6 @@ import { Alkatra } from "next/font/google";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { BackToTop } from "@/components/layout/BackToTop";
-import { CurrencyLanguageBar } from "@/components/layout/CurrencyLanguageBar";
 import { EmergencyDrawer } from "@/components/layout/EmergencyDrawer";
 import { Providers } from "@/components/providers/Providers";
 import "./globals.css";
@@ -70,7 +69,6 @@ export default function RootLayout({
           <main className="overflow-x-hidden">{children}</main>
           <Footer />
           <BackToTop />
-          <CurrencyLanguageBar />
           <EmergencyDrawer />
         </Providers>
       </body>

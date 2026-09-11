@@ -13,7 +13,6 @@ import {
   Landmark,
   Menu,
   X,
-  Sparkles,
   Heart,
   LayoutDashboard,
   Ticket,
@@ -26,18 +25,12 @@ import { useWishlist } from "@/context/WishlistContext";
 import { useSettings } from "@/context/SettingsContext";
 import { useAuth } from "@/context/AuthContext";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import { CurrencyLanguageBar } from "@/components/layout/CurrencyLanguageBar";
 import { NAV_LINKS, type NavLink } from "@/data/travelData";
 import { buttonClasses } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const SECTION_IDS = ["hero", "tours", "info", "contact"] as const;
-
-const TOURS_LINK: NavLink = {
-  label: "Tours",
-  href: "/#tours",
-  isPage: false,
-  section: "tours",
-};
 
 function prefersReducedMotion() {
   return (
@@ -176,14 +169,7 @@ export function Navbar() {
         <div className="flex items-center gap-2 sm:gap-3">
           <ThemeToggle className="hidden md:grid" />
 
-          <Link
-            href={TOURS_LINK.href}
-            onClick={(e) => handleNavClick(e, TOURS_LINK)}
-            className={cn(buttonClasses({ size: "sm", variant: "primary" }), "hidden sm:inline-flex")}
-          >
-            <Sparkles className="h-4 w-4" />
-            {t("bookNow")}
-          </Link>
+          <CurrencyLanguageBar />
 
           <Link
             href="/dashboard?tab=wishlist"
@@ -275,9 +261,11 @@ export function Navbar() {
           ) : (
             <Link
               href="/auth/signin"
-              className={cn(buttonClasses({ size: "sm", variant: "gold" }), "hidden sm:inline-flex")}
+              aria-label={t("signIn")}
+              title={t("signIn")}
+              className="grid h-10 w-10 place-items-center rounded-xl border border-hairline text-muted-foreground transition-colors hover:border-primary/40 hover:text-primary hover:bg-surface"
             >
-              {t("signIn")}
+              <User className="h-[18px] w-[18px]" />
             </Link>
           )}
 
