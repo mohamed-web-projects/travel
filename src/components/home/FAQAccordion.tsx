@@ -54,7 +54,7 @@ export function FAQAccordion() {
   }, [openIndex]);
 
   return (
-    <section className="relative scroll-mt-20 py-24">
+    <section className="cvi relative scroll-mt-20 py-24">
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
           eyebrow="Good to know"

@@ -1,13 +1,52 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useSyncExternalStore } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, useScroll, useTransform } from "framer-motion";
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import { MapPin, Calendar, Users, ArrowRight, PlayCircle, Compass } from "lucide-react";
 import { SearchFilterBar } from "./SearchFilterBar";
 
+let mounted = false;
+const listeners = new Set<() => void>();
+function subscribe(callback: () => void) {
+  listeners.add(callback);
+  return () => void listeners.delete(callback);
+}
+function notify() {
+  listeners.forEach((l) => l());
+}
+function getSnapshot() {
+  return mounted;
+}
+function getServerSnapshot() {
+  return false;
+}
+if (typeof window !== "undefined") {
+  setTimeout(() => {
+    mounted = true;
+    notify();
+  }, 0);
+}
+
+function useIsMounted() {
+  return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+}
+
 export function Hero() {
+  const isMounted = useIsMounted();
+  const prefersReduced = useReducedMotion();
+  const isDesktop =
+    isMounted &&
+    typeof window !== "undefined" &&
+    window.matchMedia("(min-width: 768px)").matches;
+  const enableParallax = isDesktop && !prefersReduced;
+
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -17,10 +56,26 @@ export function Hero() {
   const fade = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
 
   const content = (delay: number) => ({
-    initial: { opacity: 0, y: 28 },
+    initial: { opacity: 0, y: prefersReduced ? 0 : 28 },
     animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.7, delay, ease: "easeOut" as const },
+    transition: { duration: prefersReduced ? 0 : 0.7, delay, ease: "easeOut" as const },
   });
+
+  const bgImage = (
+    <>
+      <Image
+        src="/images/landing.jpg"
+        alt="Tropical paradise at golden hour"
+        fill
+        priority
+        sizes="100vw"
+        quality={75}
+        className="object-cover"
+      />
+      <div className="absolute inset-0 bg-gradient-to-b from-background via-background/95 to-background dark:from-background/70 dark:via-background/45 dark:to-background" />
+      <div className="absolute inset-0 bg-gradient-to-tr from-primary/15 via-transparent to-transparent dark:from-primary/20" />
+    </>
+  );
 
   return (
     <section
@@ -28,22 +83,16 @@ export function Hero() {
       ref={ref}
       className="relative flex min-h-screen scroll-mt-20 items-center justify-center overflow-hidden"
     >
-      <motion.div style={{ y: bgY }} className="absolute inset-0 -z-10">
-        <Image
-          src="/images/landing.jpg"
-          alt="Tropical paradise at golden hour"
-          fill
-          priority
-          sizes="100vw"
-          quality={85}
-          className="object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-background via-background/95 to-background dark:from-background/70 dark:via-background/45 dark:to-background" />
-        <div className="absolute inset-0 bg-gradient-to-tr from-primary/15 via-transparent to-transparent dark:from-primary/20" />
-      </motion.div>
+      {enableParallax ? (
+        <motion.div style={{ y: bgY }} className="absolute inset-0 -z-10">
+          {bgImage}
+        </motion.div>
+      ) : (
+        <div className="absolute inset-0 -z-10">{bgImage}</div>
+      )}
 
       <motion.div
-        style={{ opacity: fade }}
+        style={enableParallax ? { opacity: fade } : undefined}
         className="mx-auto flex w-full max-w-7xl flex-col items-center px-4 pt-24 pb-16 text-center sm:px-6 lg:px-8"
       >
         <motion.span

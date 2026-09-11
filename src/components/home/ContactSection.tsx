@@ -47,7 +47,7 @@ export function ContactSection() {
   return (
     <section
       id="contact"
-      className="relative scroll-mt-20 overflow-hidden border-t border-slate-200 bg-slate-50 py-24 dark:border-slate-800 dark:bg-slate-950"
+      className="cvi relative scroll-mt-20 overflow-hidden border-t border-slate-200 bg-slate-50 py-24 dark:border-slate-800 dark:bg-slate-950"
     >
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading

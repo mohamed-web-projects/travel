@@ -28,6 +28,7 @@ import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { CurrencyLanguageBar } from "@/components/layout/CurrencyLanguageBar";
 import { NAV_LINKS, type NavLink } from "@/data/travelData";
 import { buttonClasses } from "@/components/ui/button";
+import { CURRENCIES, LANGUAGES, type CurrencyCode } from "@/data/mockData";
 import { cn } from "@/lib/utils";
 
 const SECTION_IDS = ["hero", "tours", "info", "contact"] as const;
@@ -47,7 +48,7 @@ export function Navbar() {
   const isHome = pathname === "/";
   const spiedSection = useScrollSpy(SECTION_IDS, isHome);
   const { ids } = useWishlist();
-  const { t } = useSettings();
+  const { currency, setCurrency, language, setLanguage, t } = useSettings();
   const { user, signOut } = useAuth();
   const router = useRouter();
   const profileRef = useRef<HTMLDivElement>(null);
@@ -169,7 +170,9 @@ export function Navbar() {
         <div className="flex items-center gap-2 sm:gap-3">
           <ThemeToggle className="hidden md:grid" />
 
-          <CurrencyLanguageBar />
+          <div className="hidden sm:block">
+            <CurrencyLanguageBar />
+          </div>
 
           <Link
             href="/dashboard?tab=wishlist"
@@ -186,7 +189,7 @@ export function Navbar() {
 
           {/* Auth zone */}
           {user ? (
-            <div ref={profileRef} className="relative">
+            <div ref={profileRef} className="relative hidden sm:block">
               <button
                 type="button"
                 onClick={() => setProfileOpen((v) => !v)}
@@ -263,7 +266,7 @@ export function Navbar() {
               href="/auth/signin"
               aria-label={t("signIn")}
               title={t("signIn")}
-              className="grid h-10 w-10 place-items-center rounded-xl border border-hairline text-muted-foreground transition-colors hover:border-primary/40 hover:text-primary hover:bg-surface"
+              className="hidden sm:grid h-10 w-10 place-items-center rounded-xl border border-hairline text-muted-foreground transition-colors hover:border-primary/40 hover:text-primary hover:bg-surface"
             >
               <User className="h-[18px] w-[18px]" />
             </Link>
@@ -298,6 +301,51 @@ export function Navbar() {
               <div className="mb-2 flex items-center justify-between rounded-xl border border-hairline bg-surface px-4 py-2.5">
                 <span className="text-sm font-semibold text-foreground">Appearance</span>
                 <ThemeToggle />
+              </div>
+
+              <div className="space-y-2 rounded-xl border border-hairline bg-surface px-4 py-3">
+                <div>
+                  <label
+                    htmlFor="mobile-currency"
+                    className="mb-1 block text-[10px] font-bold uppercase tracking-widest text-muted-foreground"
+                  >
+                    Currency
+                  </label>
+                  <select
+                    id="mobile-currency"
+                    aria-label="Currency"
+                    value={currency}
+                    onChange={(e) => setCurrency(e.target.value as CurrencyCode)}
+                    className="h-10 w-full cursor-pointer rounded-xl border border-hairline bg-background px-3 text-sm font-medium text-foreground outline-none transition-colors hover:border-primary/40 focus:border-primary/60"
+                  >
+                    {Object.values(CURRENCIES).map((c) => (
+                      <option key={c.code} value={c.code}>
+                        {c.code} — {c.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label
+                    htmlFor="mobile-language"
+                    className="mb-1 block text-[10px] font-bold uppercase tracking-widest text-muted-foreground"
+                  >
+                    Language
+                  </label>
+                  <select
+                    id="mobile-language"
+                    aria-label="Language"
+                    value={language}
+                    onChange={(e) => setLanguage(e.target.value as "en" | "ar")}
+                    className="h-10 w-full cursor-pointer rounded-xl border border-hairline bg-background px-3 text-sm font-medium text-foreground outline-none transition-colors hover:border-primary/40 focus:border-primary/60"
+                  >
+                    {LANGUAGES.map((l) => (
+                      <option key={l.code} value={l.code}>
+                        {l.code.toUpperCase()} — {l.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
               {NAV_LINKS.map((link) => (

@@ -7,8 +7,8 @@ import { TESTIMONIALS } from "@/data/travelData";
 
 export function Testimonials() {
   return (
-    <section className="relative scroll-mt-20 py-24">
-      <div className="pointer-events-none absolute right-0 top-12 h-72 w-[30rem] rounded-full bg-gold/[0.07] blur-[120px]" />
+    <section className="cvi relative scroll-mt-20 py-24">
+      <div className="pointer-events-none absolute right-0 top-12 hidden h-72 w-[30rem] rounded-full bg-gold/[0.07] blur-[120px] md:block" />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
           eyebrow="Traveler Stories"

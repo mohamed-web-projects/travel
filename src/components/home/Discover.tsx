@@ -27,13 +27,14 @@ const cards = [
 
 export function Discover() {
   return (
-    <section id="info" className="relative scroll-mt-20 overflow-hidden py-24">
+    <section id="info" className="cvi relative scroll-mt-20 overflow-hidden py-24">
       <div className="absolute inset-0 -z-10">
         <Image
           src="/images/section2.jpg"
           alt=""
           fill
           sizes="100vw"
+          loading="lazy"
           className="object-cover opacity-25"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-background via-background/60 to-background" />
@@ -80,6 +81,7 @@ export function Discover() {
                   alt={`${card.title} experience`}
                   fill
                   sizes="(max-width: 768px) 100vw, 33vw"
+                  loading="lazy"
                   className="object-cover transition-transform duration-700 group-hover:scale-108"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-transparent" />

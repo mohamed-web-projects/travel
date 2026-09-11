@@ -20,8 +20,8 @@ export function ToursSection() {
   return (
     <CompareProvider>
       <section id="tours" className="relative scroll-mt-20 py-24">
-        <div className="pointer-events-none absolute left-1/2 top-0 h-72 w-[40rem] -translate-x-1/2 rounded-full bg-primary/10 blur-[120px]" />
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="pointer-events-none absolute left-1/2 top-0 hidden h-72 w-[40rem] -translate-x-1/2 rounded-full bg-primary/10 blur-[120px] md:block" />
+        <div className="cvi mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <SectionHeading
             eyebrow="Our Tours"
             title="Hand-picked destinations"

@@ -181,6 +181,17 @@
   .animate-popover-in {
     animation: popover-in 0.18s ease-out;
   }
+
+  /* Skip layout/paint for off-screen sections on low-end mobile CPUs */
+  .cvi {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 900px;
+  }
+
+  .cvi-lg {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 1600px;
+  }
 }
 
 /* ---------- reduced motion ---------- */

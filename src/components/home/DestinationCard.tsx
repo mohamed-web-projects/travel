@@ -65,7 +65,7 @@ export function DestinationCard({ destination, index, onQuickView }: Destination
           alt={`${destination.name} tour`}
           sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
           fill
-          priority={index < 3}
+          loading="lazy"
           className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-black/10" />

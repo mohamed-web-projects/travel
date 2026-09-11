@@ -28,7 +28,7 @@ export function BudgetCalculator() {
   }, [destination, tierMeta, nights, groupSize]);
 
   return (
-    <section id="planner" className="relative scroll-mt-20 py-24">
+    <section id="planner" className="cvi relative scroll-mt-20 py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
           eyebrow="Trip Planner"
